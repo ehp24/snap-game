@@ -49,11 +49,12 @@ class Game:
         
     def deal_cards(self):
         # draw cards one by one and append to each Player's hand until deck is empty
-        while len(self.game_deck.cards)>0:
+        while self.game_deck.cards:
             for player in self.players:
-                if len(self.game_deck.cards)>0:
+                if self.game_deck.cards:
                     drawn_card = self.game_deck.draw()
                     player.hand.append(drawn_card) 
+
 
 
 # deck = Deck()
