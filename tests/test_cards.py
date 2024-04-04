@@ -23,13 +23,14 @@ def test_card_str(card):
 
 @pytest.fixture
 def deck():
-    return Deck()
+    return Deck(4)
 
 def test_deck_init(deck):
-    expected_deck = [str(Card(suit, val)) for suit in SUITS for val in RANK]
+    expected_deck = [str(Card(suit, val)) for _ in range(deck.num_packs) for suit in SUITS for val in RANK]
     test_deck = [str(c) for c in deck.cards]
     assert test_deck == expected_deck
-    assert len(deck.cards) == 52
+    assert len(deck.cards) == len(expected_deck)
+    assert len(deck.cards) == 52*deck.num_packs
     
 def test_deck_shuffle(deck):
     original_deck = deck.cards.copy()
@@ -48,6 +49,14 @@ def test_deck_draw_card(deck):
     # assert drawn_card == card_on_top 
     assert drawn_card not in deck.cards
     assert len(deck.cards) == initial_count -1
+
+# def test_deck_combine_decks(deck):
+#     num_decks = 5
+#     initial_num_cards = len(deck.cards)
+#     deck.combine_decks(num_decks)
+#     assert len(deck.cards) == initial_num_cards*num_decks
+    
+    
     
     
     

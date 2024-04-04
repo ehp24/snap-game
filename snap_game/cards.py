@@ -19,8 +19,9 @@ RANK = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
 
 
 class Deck:
-    def __init__(self) -> None:
-        self.cards = [Card(suit, val) for suit in SUITS for val in RANK]
+    def __init__(self, num_packs: int) -> None:
+        self.cards = [Card(suit, val) for _ in range(num_packs) for suit in SUITS for val in RANK]
+        self.num_packs = num_packs
         
     def shuffle(self):
         random.shuffle(self.cards)
@@ -31,6 +32,12 @@ class Deck:
     
     def draw(self):
         return self.cards.pop()
+    
+    # def combine_decks(self,num_decks):
+    #     for i in range(num_decks-1):
+    #         newdeck = Deck()
+    #         self.cards+=newdeck.cards
+        
         
         
 class Player:
