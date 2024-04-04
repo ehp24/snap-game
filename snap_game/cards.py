@@ -44,8 +44,8 @@ class Game:
         self.players = players
         self.game_deck = game_deck
 
-    def shuffle_deck(self):
-        pass
+    def shuffle_game_deck(self):
+        self.game_deck.shuffle()
         
     def deal_cards(self):
         # draw cards one by one and append to each Player's hand until deck is empty

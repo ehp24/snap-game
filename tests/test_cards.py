@@ -94,6 +94,14 @@ def test_deal_cards(game):
     assert len(game.game_deck.cards) == 0
     assert player_hands == test_hands
     
+def test_game_shuffle_game_deck(game):
+    deck_before = game.game_deck.cards.copy()
+    game.shuffle_game_deck()
+    assert game.game_deck.cards != deck_before
+    assert len(game.game_deck.cards) == len(deck_before)
+    
+
+    
     
     
     
