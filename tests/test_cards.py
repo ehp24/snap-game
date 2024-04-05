@@ -1,4 +1,4 @@
-from snap_game.cards import Card, Deck, Player, Pile
+from snap_game.cards import Card, Deck, Pile
 import pytest
 from unittest.mock import patch
 
@@ -106,23 +106,7 @@ def test_get_all_cards(pile_with_cards):
 #     pile.
 
 
-@pytest.fixture
-def player1():
-    return Player("Jane")
 
-def test_player_init(player1):
-    assert player1.name == "Jane"
-    assert player1.hand == []
-    
-def test_player_play_card(player1):
-    cards = [Card("Diamonds","6"),Card("Clubs","9"),Card("Spades","J")]
-    player1.hand += cards 
-
-    while player1.hand:
-        assert player1.play_card() == cards.pop()
-        
-def test_player_play_card_from_empty_hand(player1):
-    assert player1.play_card() == None
     
     
 

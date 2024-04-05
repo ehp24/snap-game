@@ -1,11 +1,11 @@
-from snap_game.cards import Card, Deck, Player, Pile
-from snap_game.game_system import get_players, get_decks, Game
+from snap_game.cards import Card, Deck, Pile
+from snap_game.game_system import get_players, get_decks, Game, Player
 import pytest
 from unittest.mock import patch
 
 @pytest.fixture
 def players():
-    return [Player("Jane"),Player("Jack")]
+    return [Player("Jane","a","b"),Player("Jack","c","d")]
 
 @pytest.fixture
 def deck():
@@ -87,7 +87,9 @@ def test_get_decks_invalid_input(monkeypatch):
 
 def test_get_players(monkeypatch):
     input_names = ["Jane", "Jack"]
-    expected_players = [Player(name) for name in input_names]
+    play_keys = ["q", "p"]
+    snap_keys = ["z", "m"]
+    expected_players = [Player(name, play_key, snap_key) for name, play_key, snap_key in zip(input_names, play_keys, snap_keys)]
     
     def mock_input(prompt):
         return input_names.pop(0)
@@ -101,6 +103,29 @@ def test_get_players(monkeypatch):
         assert type(players[i]) == Player
         assert players[i].name == expected_players[i].name
         assert players[i].hand == expected_players[i].hand
-    
+        assert players[i].playkey == expected_players[i].playkey
+        assert players[i].snapkey == expected_players[i].snapkey
     
 
+
+
+@pytest.fixture
+def player1():
+    return Player("Jane","q","z")
+
+def test_player_init(player1):
+    assert player1.name == "Jane"
+    assert player1.hand == []
+    assert player1.snapkey == "z"
+    assert player1.playkey == "q"
+    
+    
+def test_player_play_card(player1):
+    cards = [Card("Diamonds","6"),Card("Clubs","9"),Card("Spades","J")]
+    player1.hand += cards 
+
+    while player1.hand:
+        assert player1.play_card() == cards.pop()
+        
+def test_player_play_card_from_empty_hand(player1):
+    assert player1.play_card() == None

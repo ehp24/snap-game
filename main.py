@@ -1,6 +1,6 @@
-from snap_game.cards import Card, Deck, Player, Game
-from snap_game.game_setup import get_players, get_decks
-from pynput import keyboard
+from snap_game.cards import Card, Deck, Pile
+from snap_game.game_system import get_players, get_decks, Game, Player
+
 
 def main():
     print("==============================================")
@@ -18,19 +18,20 @@ def main():
     # Create game object
     game = Game(players,game_deck) 
     
+    game.play()
     
     
     
-    def on_press(key):
-        key_list = ['q','p']
-        k = key.char
-        if k in key_list:
-            print(f"Key pressed: {k}")
+    # def on_press(key):
+    #     key_list = ['q','p']
+    #     k = key.char
+    #     if k in key_list:
+    #         print(f"Key pressed: {k}")
     
-    listener = keyboard.Listener(on_press=on_press)
-    listener.start()
+    # listener = keyboard.Listener(on_press=on_press)
+    # listener.start()
     
-    name = input("HI:")
+    # name = input("HI:")
 
     
 

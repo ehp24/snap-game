@@ -64,18 +64,7 @@ class Pile:
     def get_all_cards(self): # getter for safer access to all pile cards
         return self.cards
         
-class Player:
-    def __init__(self, name: str) -> None:
-        self.name = name
-        self.hand = [] # players always start with empty hands
-    
-    def play_card(self):
-        try:
-            return self.hand.pop() # card played is last card in hand list
-        
-        except IndexError:
-            print("Cannot play card as hand is empty")
-            return None
+
         
         
 
