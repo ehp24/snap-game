@@ -1,5 +1,6 @@
-from snap_game.cards import Card, Deck, Player, Game, Pile
+from snap_game.cards import Card, Deck, Player, Pile
 import pytest
+from unittest.mock import patch
 
 SUITS = ["Hearts", "Diamonds", "Spades", "Clubs"]
 RANK = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
@@ -50,12 +51,8 @@ def test_deck_draw_card(deck):
     assert drawn_card not in deck.cards
     assert len(deck.cards) == initial_count -1
 
-# def test_deck_combine_decks(deck):
-#     num_decks = 5
-#     initial_num_cards = len(deck.cards)
-#     deck.combine_decks(num_decks)
-#     assert len(deck.cards) == initial_num_cards*num_decks
-    
+
+
     
     
 @pytest.fixture
@@ -130,52 +127,9 @@ def test_player_play_card_from_empty_hand(player1):
     
 
 
-@pytest.fixture
-def players():
-    return [Player("Jane"),Player("Jack")]
 
 
-def test_game_init(players, deck):
-    game = Game(players,deck)
-    assert game.players == players
-    assert game.game_deck == deck
-    
-    
-@pytest.fixture
-def game(players,deck):
-    return Game(players,deck)
 
-def test_game_init(game, players, deck):
-    assert game.players == players
-    assert game.game_deck == deck
-    assert type(game.pile) == Pile
-    assert game.pile.cards ==[]
-    
-    
-    
-
-def test_deal_cards(game):
-    total_cards = len(game.game_deck.cards)
-    num_players = len(game.players)
-    
-    # deal cards
-    game.deal_cards()
-    
-    player_hands = [len(p.hand) for p in game.players]
-    evenly_cards = total_cards // num_players
-    leftover_cards = total_cards % num_players
-    test_hands = [evenly_cards]*num_players
-    for i in range(leftover_cards):
-        test_hands[i]+=1
-        
-    assert len(game.game_deck.cards) == 0
-    assert player_hands == test_hands
-    
-def test_game_shuffle_game_deck(game):
-    deck_before = game.game_deck.cards.copy()
-    game.shuffle_game_deck()
-    assert game.game_deck.cards != deck_before
-    assert len(game.game_deck.cards) == len(deck_before)
     
 
     

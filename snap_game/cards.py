@@ -78,23 +78,7 @@ class Player:
             return None
         
         
-class Game:
-    def __init__(self, players: list[Player], game_deck: Deck) -> None:
-        self.players = players
-        self.game_deck = game_deck
-        self.pile = Pile()
-        
 
-    def shuffle_game_deck(self):
-        self.game_deck.shuffle()
-        
-    def deal_cards(self):
-        # draw cards one by one and append to each Player's hand until deck is empty
-        while self.game_deck.cards:
-            for player in self.players:
-                if self.game_deck.cards:
-                    drawn_card = self.game_deck.draw()
-                    player.hand.append(drawn_card) 
 
 
 

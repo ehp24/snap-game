@@ -21,7 +21,18 @@ def main():
     
     
     
+    def on_press(key):
+        key_list = ['q','p']
+        k = key.char
+        if k in key_list:
+            print(f"Key pressed: {k}")
+    
+    listener = keyboard.Listener(on_press=on_press)
+    listener.start()
+    
+    name = input("HI:")
 
+    
 
 # def on_press(key):
 #     if key == keyboard.Key.esc:

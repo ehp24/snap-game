@@ -1,6 +1,23 @@
-# file containing functions for setting up and initiating the snap game
-from .cards import Card, Deck, Player, Game
+from .cards import Card, Deck, Player, Pile
 
+class Game:
+    def __init__(self, players: list[Player], game_deck: Deck) -> None:
+        self.players = players
+        self.game_deck = game_deck
+        self.pile = Pile()
+        
+
+    def shuffle_game_deck(self):
+        self.game_deck.shuffle()
+        
+    def deal_cards(self):
+        # draw cards one by one and append to each Player's hand until deck is empty
+        while self.game_deck.cards:
+            for player in self.players:
+                if self.game_deck.cards:
+                    drawn_card = self.game_deck.draw()
+                    player.hand.append(drawn_card) 
+                    
 def get_players():
     num_players = 2 # fix for now 
     
@@ -31,5 +48,7 @@ def get_decks():
     except ValueError:
         print("Invalid input: please enter an integer value between 1 and 5.")
         num_packs = get_decks()
-        
     return num_packs
+
+
+                    
