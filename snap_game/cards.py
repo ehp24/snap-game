@@ -43,20 +43,26 @@ class Pile:
     def __init__(self) -> None:
         self.cards = []
         
-    def add_to_pile(self):
-        pass
+    def add_to_pile(self, card: Card):
+        self.cards.append(card)
     
-    def check_snap():
-        pass
+    # def check_snap(self):
+    #     if len(self.cards) < 2:
+    #         return False
+    #     pass
     
-    def show_top_2():
-        pass
+    def get_top_2(self) -> tuple:
+        num_cards = len(self.cards)
+        second_card = self.cards[-2] if num_cards>=2 else None
+        first_card = self.cards[-1] if num_cards>=1 else None
+        return (second_card, first_card)
+        
     
-    def clear():
-        pass
+    def clear_all(self):
+        self.cards = []
     
-    def get_all_cards():
-        pass
+    def get_all_cards(self): # getter for safer access to all pile cards
+        return self.cards
         
 class Player:
     def __init__(self, name: str) -> None:
