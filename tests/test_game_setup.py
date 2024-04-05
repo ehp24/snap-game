@@ -17,6 +17,7 @@ def test_get_players(monkeypatch):
     
     assert len(players) == len(expected_players)
     for i in range(len(players)):
+        assert type(players[i]) == Player
         assert players[i].name == expected_players[i].name
         assert players[i].hand == expected_players[i].hand
     

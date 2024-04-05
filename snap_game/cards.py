@@ -38,12 +38,38 @@ class Deck:
     #         newdeck = Deck()
     #         self.cards+=newdeck.cards
         
+
+class Pile:
+    def __init__(self) -> None:
+        self.cards = []
         
+    def add_to_pile(self):
+        pass
+    
+    def check_snap():
+        pass
+    
+    def show_top_2():
+        pass
+    
+    def clear():
+        pass
+    
+    def get_all_cards():
+        pass
         
 class Player:
     def __init__(self, name: str) -> None:
         self.name = name
         self.hand = [] # players always start with empty hands
+    
+    def play_card(self):
+        try:
+            return self.hand.pop() # card played is last card in hand list
+        
+        except IndexError:
+            print("Cannot play card as hand is empty")
+            return None
         
         
 class Game:
