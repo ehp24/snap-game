@@ -82,6 +82,8 @@ class Game:
     def __init__(self, players: list[Player], game_deck: Deck) -> None:
         self.players = players
         self.game_deck = game_deck
+        self.pile = Pile()
+        
 
     def shuffle_game_deck(self):
         self.game_deck.shuffle()

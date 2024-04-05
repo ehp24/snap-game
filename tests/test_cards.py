@@ -132,7 +132,7 @@ def test_player_play_card_from_empty_hand(player1):
 
 @pytest.fixture
 def players():
-    return [Player("Jane"),Player("Jack"),Player("Jill")]
+    return [Player("Jane"),Player("Jack")]
 
 
 def test_game_init(players, deck):
@@ -144,6 +144,15 @@ def test_game_init(players, deck):
 @pytest.fixture
 def game(players,deck):
     return Game(players,deck)
+
+def test_game_init(game, players, deck):
+    assert game.players == players
+    assert game.game_deck == deck
+    assert type(game.pile) == Pile
+    assert game.pile.cards ==[]
+    
+    
+    
 
 def test_deal_cards(game):
     total_cards = len(game.game_deck.cards)
