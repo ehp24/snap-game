@@ -17,3 +17,19 @@ def get_players():
         players[i] = Player(name)
         
     return players
+
+def get_decks():
+    try:
+        num_packs = float(input("Enter the number of packs of cards to use (1 to 5): "))
+        print(" ")
+        if num_packs.is_integer() and 0<int(num_packs) and int(num_packs)<=5 :
+            num_packs = int(num_packs)
+            print(f"{num_packs} packs of cards will be used in the game deck.", end='\n\n')
+        else:
+            raise ValueError("Invalid number: number was not an integer between 1 and 5.")
+        
+    except ValueError:
+        print("Invalid input: please enter an integer value between 1 and 5.")
+        num_packs = get_decks()
+        
+    return num_packs
