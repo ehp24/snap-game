@@ -10,6 +10,10 @@ class Card:
     
     def get_value(self):
         return self.value
+
+    
+    def show_card(self):
+        return (self.value, self.suit)
     
     def __str__(self) -> str:
         return f"{self.value} {self.suit}"
@@ -63,6 +67,10 @@ class Pile:
     
     def get_all_cards(self): # getter for safer access to all pile cards
         return self.cards
+    
+    def show_all_cards(self):
+        cards_pile = [str(card) for card in self.cards]
+        return cards_pile
         
 
         

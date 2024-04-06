@@ -17,6 +17,10 @@ def test_card_init(card):
     assert card.suit == "Diamonds"
     assert card.value == "8"
     
+def test_show_card(card):
+    assert card.show_card() == ("8", "Diamonds")
+    
+
 def test_card_str(card):
     assert str(card) == "8 Diamonds"
     
