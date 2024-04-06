@@ -26,6 +26,8 @@ def test_card_str(card):
     
 
 
+
+
 @pytest.fixture
 def deck():
     return Deck(4)
@@ -45,7 +47,11 @@ def test_deck_shuffle(deck):
     deck.shuffle()
     shuffled_2 = deck.cards.copy()
     assert shuffled_2 != shuffled_1
-    
+
+def test_show_cards(deck):
+    cardlist = [str(c) for c in deck.cards]
+    assert deck.show_cards() == cardlist
+
 def test_deck_draw_card(deck):
     initial_count = len(deck.cards)
     # card_on_top = deck.cards[-1]
@@ -54,6 +60,8 @@ def test_deck_draw_card(deck):
     # assert drawn_card == card_on_top 
     assert drawn_card not in deck.cards
     assert len(deck.cards) == initial_count -1
+    
+
 
 
 
@@ -70,6 +78,7 @@ def pile_with_cards():
     pile_1.cards +=cards
     return pile_1
     
+    
 def test_pile_init(pile):
     assert pile.cards == []
     
@@ -79,9 +88,7 @@ def test_pile_add_to_pile(pile, card):
     assert len(original_pile) == len(pile.cards) - 1
     assert pile.cards[-1] == card
     
-def test_pile_clear_all(pile_with_cards):
-    pile_with_cards.clear_all()
-    assert pile_with_cards.cards == []
+
 
 def test_pile_get_top_2_with_empty_pile(pile):
     assert pile.get_top_2() == (None,None)
@@ -94,9 +101,18 @@ def test_pile_get_top_2(pile_with_cards):
     top_card = pile_with_cards.cards[-1]
     second_card = pile_with_cards.cards[-2]
     assert pile_with_cards.get_top_2() == (second_card, top_card)
+
+def test_pile_clear_all(pile_with_cards):
+    pile_with_cards.clear_all()
+    assert pile_with_cards.cards == []
     
 def test_get_all_cards(pile_with_cards):
     assert pile_with_cards.get_all_cards() == pile_with_cards.cards
+
+def test_show_all_cards(pile_with_cards):
+    cardlist = [str(c) for c in pile_with_cards.cards]
+    assert cardlist == pile_with_cards.show_all_cards()
+
 
 # def test_pile_check_snap_with_empty_pile(pile):
 #     assert pile.check_snap() == False

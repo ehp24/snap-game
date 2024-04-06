@@ -4,11 +4,11 @@ import tty
 import termios
 from pynput import keyboard
 from enum import Enum
-
-
+from .utils import clear_screen
+import os
         
 # orginal terminal settings to restore terminal echoing after
-ORIGINAL_TERMINAL_SETTINGS = termios.tcgetattr(sys.stdin)
+# ORIGINAL_TERMINAL_SETTINGS = termios.tcgetattr(sys.stdin)
 # from pynput import keyboard
 
 class Player:
@@ -49,8 +49,6 @@ class Game:
         self.player2 = self.players[1]
         self.current_player = self.player1
 
-        
-
     def shuffle_game_deck(self):
         self.game_deck.shuffle()
         
@@ -62,22 +60,22 @@ class Game:
                     drawn_card = self.game_deck.draw()
                     player.hand.append(drawn_card) 
                     
+       
+    # NEED TO WRITE PYTEST                
     def play(self):
-
-        
         while self.state == Game_State.PLAY:
-            
 
-            tty.setcbreak(sys.stdin.fileno()) # Disable echoing of input characters in console
+            # tty.setcbreak(sys.stdin.fileno()) # Disable echoing of input characters in console
             print(f"{self.current_player.name}, play a card on the pile by pressing your play key [{self.current_player.playkey}]:")
             
             
             with keyboard.Listener(on_press=self.on_press) as listener:
                 listener.join()
-
+            termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+            
             
                 
-        
+    # NEED TO WRITE PYTEST  
     def card_played(self):
 
         print("Inside card played fucntion!")
@@ -96,7 +94,7 @@ class Game:
             
 
 
-
+    # NEED TO WRITE PYTEST  
     def on_press(self, key):
         
         try:
@@ -114,7 +112,7 @@ class Game:
             print(f"You pressed an invalid key. Please press [{self.current_player.playkey}] to play a card on the pile or [{self.current_player.snapkey}] to call snap")
 
 
-
+    # NEED TO WRITE PYTEST  
     def game_end(self):
         print("Game ending")
         
@@ -131,11 +129,13 @@ class Game:
         print("exitting game end...")
         
         # restore terminal settings once game is finished
-        termios.tcsetattr(sys.stdin, termios.TCSANOW, ORIGINAL_TERMINAL_SETTINGS)
+        # os.system('clear')
+        # termios.tcsetattr(sys.stdin, termios.TCSANOW, ORIGINAL_TERMINAL_SETTINGS)
         
         self.state = Game_State.END
-                     
-    def snap(self, event):
+        
+    # NEED TO WRITE PYTEST              
+    def snap(self):
         self.state = Game_State.SNAP
         print("snapping state invoked")
         print("exiting....snap....")
@@ -179,11 +179,6 @@ def get_players():
         
     return players
 
-# def check_valid_key(key):
-#     if len(key) == 1 and ord(key)>=97 and ord(key)<=122:
-#         return True
-#     else:
-#         return False
     
     
 

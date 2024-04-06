@@ -1,5 +1,9 @@
 import random
 
+SUITS = ["Hearts", "Diamonds", "Spades", "Clubs"]
+RANK = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
+
+
 class Card:
     def __init__(self, suit, value):
         self.suit = suit
@@ -18,8 +22,11 @@ class Card:
     def __str__(self) -> str:
         return f"{self.value} {self.suit}"
         
-SUITS = ["Hearts", "Diamonds", "Spades", "Clubs"]
-RANK = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
+
+
+
+
+
 
 
 class Deck:
@@ -30,9 +37,12 @@ class Deck:
     def shuffle(self):
         random.shuffle(self.cards)
     
-    def get_cards(self):
-        for card in self.cards:
-            print(card)
+    
+    #   THIS?? NO...    
+    def show_cards(self):
+        cardslist = [str(c) for c in self.cards]
+        return cardslist
+
     
     def draw(self):
         return self.cards.pop()
@@ -79,17 +89,7 @@ class Pile:
 
 
 
-# deck = Deck()
-# players = [Player("Ellie"),Player("Jane")]
-# game = Game(players,deck)
-# for p in game.players:
-#     print(p.name)
-#     print(len(p.hand))
-    
-# game.deal_cards()
-# for p in game.players:
-#     print(p.name)
-#     print(len(p.hand))
+
 
 
 

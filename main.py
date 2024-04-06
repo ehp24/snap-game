@@ -2,6 +2,11 @@ from snap_game.cards import Card, Deck, Pile
 from snap_game.game_system import get_players, get_decks, Game, Player
 from snap_game.utils import clear_screen
 import time
+import sys
+import termios
+import os
+import tty
+
 def main():
     print("==============================================")
     print("Welcome to the Game of Snap!", end='\n\n')
@@ -32,10 +37,13 @@ def main():
     game.deal_cards()
     
     game.play()
+    stdin = sys.stdin.fileno()
+    tattr = termios.tcgetattr(stdin)
+     
     
     print("were in mainloop and were done!")
+    sys.stdin.flush()
     
-    time.sleep(5)
 
     
 
