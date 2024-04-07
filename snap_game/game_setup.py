@@ -50,17 +50,21 @@ class Game_Setup:
         return players
 
     @staticmethod
-    def get_decks():
+    def get_decks(snapcondition):
         try:
-            num_packs = float(input("Enter the number of packs of cards to use (1 to 5): "))
+            if snapcondition == Snap_Condition.MATCH_SUIT_VALUE:
+                minpacks = 2
+            else:
+                minpacks = 1
+            num_packs = float(input(f"Enter the number of packs of cards to use ({minpacks} to 5): "))
             print(" ")
-            if num_packs.is_integer() and 0<int(num_packs) and int(num_packs)<=5 :
+            if num_packs.is_integer() and minpacks<=int(num_packs) and int(num_packs)<=5 :
                 num_packs = int(num_packs)
                 print(f"{num_packs} packs of cards will be used in the game deck.", end='\n\n')
             else:
-                raise ValueError("Invalid number: number was not an integer between 1 and 5.")
+                raise ValueError(f"Invalid number: number was not an integer between {minpacks} and 5.")
 
         except ValueError:
-            print("Invalid input: please enter an integer value between 1 and 5.")
-            num_packs = get_decks()
+            print(f"Invalid input: please enter an integer value between {minpacks} and 5.")
+            num_packs = Game_Setup.get_decks(snapcondition)
         return num_packs

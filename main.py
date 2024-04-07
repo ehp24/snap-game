@@ -24,7 +24,7 @@ def main():
         snap_condition = Game_Setup.get_snap_condition()
         
         # Get number of packs of cards used for game 
-        num_packs = Game_Setup.get_decks()
+        num_packs = Game_Setup.get_decks(snap_condition)
         
 
         
