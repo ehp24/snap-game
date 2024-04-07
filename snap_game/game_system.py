@@ -29,12 +29,19 @@ class Player:
     def show_hand(self):
         cards_in_hand = [str(card) for card in self.hand]
         return cards_in_hand
+    
+    #PYTEST
+    def add_cards_to_hand(self, cardstack = list[Card]):
+        # add cards to bottmom of hand i.e. begining of list
+        cardstack += self.hand
+        self.hand = cardstack
+        
         
 
 class Game_State(Enum):
-    SETUP = 0
-    PLAY = 1
-    SNAP = 2
+    PLAY = 0
+    SNAP = 1
+    WINNER = 2
     END = 3
         
 # NEED PYTEST
@@ -54,7 +61,9 @@ class Game:
         self.player2 = self.players[1]
         self.current_player = self.player1
         self.snap_condition = snap_condition
-
+        self.snap_key_pressed = None
+        self.winner = None
+        
     def shuffle_game_deck(self):
         self.game_deck.shuffle()
         
@@ -66,18 +75,28 @@ class Game:
                     drawn_card = self.game_deck.draw()
                     player.hand.append(drawn_card) 
                     
-       
+    # pytest this!!!        
+    def run_game(self):
+        # a fucntion that continouosly monitors the states of the game and runs the respective fucntions depending on the state
+        while self.state != Game_State.END:
+            if self.state == Game_State.PLAY:
+                self.play()
+            elif self.state == Game_State.SNAP:
+                self.snap()
+            elif self.state == Game_State.WINNER:
+                self.win()
+        self.game_end()
+                
     # NEED TO WRITE PYTEST                
     def play(self):
-        while self.state == Game_State.PLAY:
-
-            # tty.setcbreak(sys.stdin.fileno()) # Disable echoing of input characters in console
-            print(f"{self.current_player.name}, play a card on the pile by pressing your play key [{self.current_player.playkey}]:")
+        
+        # tty.setcbreak(sys.stdin.fileno()) # Disable echoing of input characters in console
+        print(f"{self.current_player.name}, play a card on the pile by pressing your play key [{self.current_player.playkey}]:")
+        
+        with keyboard.Listener(on_press=self.on_press) as listener:
+            listener.join()
+        termios.tcflush(sys.stdin, termios.TCIOFLUSH)
             
-            
-            with keyboard.Listener(on_press=self.on_press) as listener:
-                listener.join()
-            termios.tcflush(sys.stdin, termios.TCIOFLUSH)
             
             
                 
@@ -89,13 +108,14 @@ class Game:
         
         if not played_card: # if play_card() returns none:
             print(f"Card could not be placed as {self.current_player.name}'s hand is empty. Ending game")
-            self.game_end()
+            self.state = Game_State.END
+
         else:
         # only one pile in whole game so dont need to pass pile into card_played
             self.pile.add_to_pile(played_card)
             print("You played a",played_card)
             (card1, card2) = self.pile.get_top_2()
-            print(f"Cards at top of pile: {card1.show_card() if card1 else 'empty pile'} , {card2.show_card() if card2 else ('empty pile')}", end='\n\n' )
+            print(f"Cards at top of pile: {card1.show_card() if card1 else 'No card'} , {card2.show_card() if card2 else ('empty pile')}", end='\n\n' )
             self.switch_current_player()
             
 
@@ -104,13 +124,13 @@ class Game:
     def on_press(self, key):
         
         try:
-            if key.char in [player.playkey for player in self.players]:
+            if key.char == self.current_player.playkey: 
                 # KEEP GAME STATE
                 self.card_played()
             elif key.char in [player.snapkey for player in self.players]:
                 # CHANGE GAME STATE TO SNAP PHASE
-                
-                self.snap(key.char)
+                self.snap_key_pressed = key.char
+                self.state = Game_State.SNAP
             else:
                 print(f"You pressed an invalid key. Please press [{self.current_player.playkey}] to play a card on the pile or [{self.current_player.snapkey}] to call snap")
             return False
@@ -139,34 +159,49 @@ class Game:
         # os.system('clear')
         # termios.tcsetattr(sys.stdin, termios.TCSANOW, ORIGINAL_TERMINAL_SETTINGS)
         
-        self.state = Game_State.END
+        
         
     # NEED TO WRITE PYTEST              
-    def snap(self, key: str):
-        
-        self.state = Game_State.SNAP
+    def snap(self):
         
         # check is snap correct or not
-        card1, card2 = self.pile.get_top_2()
+        (card1, card2) = self.pile.get_top_2()
         
+        if card1 == None or card2 == None:
+            print("Snap was called incorrectly, please carry on playing.")
+            self.state = Game_State.PLAY
+            self.snap_key_pressed = None
+            return         
         
+        if self.snap_condition == Snap_Condition.MATCH_SUIT and card1.suit == card2.suit:
+                self.state = Game_State.WINNER         
+        elif self.snap_condition == Snap_Condition.MATCH_VALUE and card1.value == card2.value:
+                self.state = Game_State.WINNER
+        elif self.snap_condition == Snap_Condition.MATCH_SUIT_VALUE and card1.value == card2.value and card1.suit == card2.suit:
+                self.state = Game_State.WINNER
+        else:
+            print("Snap was called incorrectly, please carry on playing.")
+            self.state = Game_State.PLAY
+            self.snap_key_pressed = None
+            return
         
         # who called snap
-        if self.player1.snapkey ==  key:
-            snap_caller = self.player1
+        if self.player1.snapkey ==  self.snap_key_pressed:
+            self.winner = self.player1
         else:
-            snap_caller = self.player2
+            self.winner = self.player2
         
+    
+    def win(self):
+        print(f"Well done {self.winner}! You correctly called snap, card pile will be added to your hand.")
+        pile_cards = self.pile.get_all_cards()
+        self.winner.add_cards_to_hand(pile_cards)
+        # clear pile
+        self.pile.clear_all()
         
-                
+        print(f"Congratulations! {self.winner.name} won the game!")
         
-        # checks if snap was correct
-        
-        
-        
-        print("snapping state invoked")
-        print("exiting....snap....")
-        self.game_end()
+        self.state = Game_State.END
         
         
     def switch_current_player(self):

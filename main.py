@@ -26,7 +26,6 @@ def main():
         # Get number of packs of cards used for game 
         num_packs = Game_Setup.get_decks(snap_condition)
         
-
         
         # Create game deck
         game_deck = Deck(num_packs)
@@ -42,7 +41,7 @@ def main():
     print("Dealing cards to players...", end='\n\n')
     game.deal_cards()
     
-    game.play()
+    game.run_game()
 
      
     

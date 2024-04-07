@@ -37,22 +37,23 @@ def test_player_show_hand(player1):
 
 
 def test_enum_values():
-    assert Game_State.SETUP.value == 0
-    assert Game_State.PLAY.value == 1
-    assert Game_State.SNAP.value == 2
+    
+    assert Game_State.PLAY.value == 0
+    assert Game_State.SNAP.value == 1
+    assert Game_State.WINNER.value == 2
     assert Game_State.END.value == 3
 
 def test_enum_names():
-    assert Game_State.SETUP.name == "SETUP"
     assert Game_State.PLAY.name == "PLAY"
-    assert Game_State.SNAP.name == "SNAP"
-    assert Game_State.END.name == "END"
+    assert Game_State.SNAP.name == 'SNAP'
+    assert Game_State.WINNER.name == 'WINNER'
+    assert Game_State.END.name == 'END'
 
 def test_enum_members():
     assert list(Game_State) == [
-        Game_State.SETUP,
         Game_State.PLAY,
         Game_State.SNAP,
+        Game_State.WINNER,
         Game_State.END
     ]
     
@@ -62,7 +63,7 @@ def test_enum_values_are_unique():
 
 def test_enum_is_immutable():
     with pytest.raises(AttributeError):
-        Game_State.SETUP = 5  # Trying to change the value should raise an error
+        Game_State.PLAY = 5  # Trying to change the value should raise an error
 
 
 
