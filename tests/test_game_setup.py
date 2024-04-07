@@ -1,5 +1,5 @@
 from snap_game.game_setup import Game_Setup
-from snap_game.game_system import Player
+from snap_game.game_system import Player, Snap_Condition
 
 
 def test_get_players(monkeypatch):
@@ -34,7 +34,7 @@ def test_get_decks_valid_input(monkeypatch):
     monkeypatch.setattr('builtins.input', mock_input)
 
     for op in expected_output:
-        result = Game_Setup.get_decks()
+        result = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT)
         assert result == op
 
 
@@ -47,5 +47,10 @@ def test_get_decks_invalid_input(monkeypatch):
     monkeypatch.setattr('builtins.input', mock_input)
 
     while input_list:
-        valid_op = Game_Setup.get_decks() #fucntion will keep runnign until we get valid input
+        valid_op = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT) #fucntion will keep runnign until we get valid input
         assert valid_op == 5
+        
+# PLEASE WRITE PYTEST CHECKING WHEN SNAPCONDITION IS BOTH, SO THAT IT ERRORS FOR INPUT OF 1!!!!
+
+
+# WRITE PYTEST FOR GET SNAP CONDITION!!!
