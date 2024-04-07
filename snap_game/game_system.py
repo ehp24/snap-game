@@ -37,10 +37,15 @@ class Game_State(Enum):
     SNAP = 2
     END = 3
         
+# NEED PYTEST
+class Snap_Condition(Enum):
+    MATCH_SUIT = 0
+    MATCH_VALUE = 1
+    MATCH_SUIT_VALUE = 2
     
     
 class Game:
-    def __init__(self, players: list[Player], game_deck: Deck) -> None:
+    def __init__(self, players: list[Player], game_deck: Deck, snap_condition:Snap_Condition) -> None:
         self.players = players
         self.game_deck = game_deck
         self.pile = Pile()
@@ -48,6 +53,7 @@ class Game:
         self.player1 = self.players[0]
         self.player2 = self.players[1]
         self.current_player = self.player1
+        self.snap_condition = snap_condition
 
     def shuffle_game_deck(self):
         self.game_deck.shuffle()
@@ -103,7 +109,8 @@ class Game:
                 self.card_played()
             elif key.char in [player.snapkey for player in self.players]:
                 # CHANGE GAME STATE TO SNAP PHASE
-                self.snap()
+                
+                self.snap(key.char)
             else:
                 print(f"You pressed an invalid key. Please press [{self.current_player.playkey}] to play a card on the pile or [{self.current_player.snapkey}] to call snap")
             return False
@@ -135,8 +142,28 @@ class Game:
         self.state = Game_State.END
         
     # NEED TO WRITE PYTEST              
-    def snap(self):
+    def snap(self, key: str):
+        
         self.state = Game_State.SNAP
+        
+        # check is snap correct or not
+        card1, card2 = self.pile.get_top_2()
+        
+        
+        
+        # who called snap
+        if self.player1.snapkey ==  key:
+            snap_caller = self.player1
+        else:
+            snap_caller = self.player2
+        
+        
+                
+        
+        # checks if snap was correct
+        
+        
+        
         print("snapping state invoked")
         print("exiting....snap....")
         self.game_end()
@@ -150,52 +177,16 @@ class Game:
 
         
         
+
+    # self.snap_condition = 
+                     
+
+        
         
         
                     
                     
                                    
-def get_players():
-    num_players = 2 # fix for now 
-    
-    players = [None]*num_players
-    player_names = set()
-    play_keys = ["q","p"] # two keys as only two players for now
-    snap_keys = ["z", "m"]
-    
-    for i in range(0,num_players):
-        name = input(f"Enter Player{i+1}'s name: ")
-        while name in player_names:
-            name = input(f"Sorry, player with that name already exists. Please enter another name Player{i+1}: ")
-        
-        player_names.add(name)
-        print(f"Hi {name}, you are Player{i+1}!" , end='\n\n')
-        print(f"{name}, please press key: {play_keys[i]} , to play a card on your pile, and key: {snap_keys[i]} , to call Snap! ")
-        # playkey = input(f"{name}, please choose a key for playing a card on your pile, it must be a single lower case character: ")
-        
-        # while not check_valid_key(playkey):
-        
-        players[i] = Player(name,play_keys[i], snap_keys[i])
-        
-    return players
-
-    
-    
-
-def get_decks():
-    try:
-        num_packs = float(input("Enter the number of packs of cards to use (1 to 5): "))
-        print(" ")
-        if num_packs.is_integer() and 0<int(num_packs) and int(num_packs)<=5 :
-            num_packs = int(num_packs)
-            print(f"{num_packs} packs of cards will be used in the game deck.", end='\n\n')
-        else:
-            raise ValueError("Invalid number: number was not an integer between 1 and 5.")
-        
-    except ValueError:
-        print("Invalid input: please enter an integer value between 1 and 5.")
-        num_packs = get_decks()
-    return num_packs
 
 
                     

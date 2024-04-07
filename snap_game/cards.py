@@ -21,6 +21,7 @@ class Card:
     
     def __str__(self) -> str:
         return f"{self.value} {self.suit}"
+    
         
 
 
