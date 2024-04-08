@@ -25,4 +25,4 @@ $RECYCLE.BIN/
 *.code-workspace
 
 # misc
-.misc
+misc/
