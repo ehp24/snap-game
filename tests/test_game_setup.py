@@ -26,29 +26,31 @@ def test_get_players(monkeypatch):
 
 
 def test_get_decks_valid_input(monkeypatch):
+    max_decks = 5
     input_vals = ["1", "2", "3", "4", "5", "3.0"]
     expected_output = [1, 2, 3, 4, 5, 3]
-
+    
     def mock_input(prompt):
         return input_vals.pop(0)
 
     monkeypatch.setattr('builtins.input', mock_input)
 
     for op in expected_output:
-        result = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT)
+        result = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT,max_decks)
         assert result == op
 
 
 def test_get_decks_invalid_input(monkeypatch):
-    input_list = ["-1", "2.5", "3.990", "49", "0", "6", "5"]
-
+    max_decks = 5
+    input_list = ["-1", "2.5", "3.990", "49", "0", "6", max_decks]
+    
     def mock_input(prompt):
         return input_list.pop(0)
 
     monkeypatch.setattr('builtins.input', mock_input)
 
     while input_list:
-        valid_op = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT) #fucntion will keep runnign until we get valid input
+        valid_op = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT, max_decks) #fucntion will keep runnign until we get valid input
         assert valid_op == 5
         
 # PLEASE WRITE PYTEST CHECKING WHEN SNAPCONDITION IS BOTH, SO THAT IT ERRORS FOR INPUT OF 1!!!!

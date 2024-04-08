@@ -37,7 +37,6 @@ def test_player_show_hand(player1):
 
 
 def test_enum_values():
-    
     assert Game_State.PLAY.value == 0
     assert Game_State.SNAP.value == 1
     assert Game_State.WINNER.value == 2
@@ -85,7 +84,8 @@ def deck():
     
 @pytest.fixture
 def game(players,deck):
-    return Game(players,deck, Snap_Condition.MATCH_VALUE)
+    num_rounds=2
+    return Game(players,deck, Snap_Condition.MATCH_VALUE, num_rounds)
 
 def test_game_init(game, players, deck):
     assert game.players == players

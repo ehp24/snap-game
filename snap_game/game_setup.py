@@ -9,6 +9,16 @@ class End_Condition(Enum):
 class Game_Setup:
     
     @staticmethod
+    def display_intro():
+        print("===================================================")
+        print("Welcome to the game of Snap!", end='\n\n')
+        print("<< Instructions >>")
+        print("The aim of the game is to win cards by calling SNAP when the two cards on the top of the pile match by a certain condition.")
+        print("If you call snap correctly, the cards in the pile will be added to your hand.")
+        print("A round is finished when a player successfully calls snap.")
+        print("The player with the most cards in their hand at the end of the rounds is the winner!", end='\n\n')
+        
+    @staticmethod
     def get_players(num_players: int):
         
         players = [None]*num_players
