@@ -14,12 +14,14 @@ def main():
     print("<< Instructions >>")
     print("The aim of the game is to win cards by calling SNAP when the two cards on the top of the pile match by a certain condition.")
     print("If you call snap correctly, the cards in the pile will be added to your hand.")
+    print("A round is finished when a player successfully calls snap.")
     print("The player with the most cards in their hand at the end of the rounds is the winner!", end='\n\n')
+
     
     # cut beginning for tetsing purposes
     testing = 0
     if testing:
-        game= Game([Player("Ellie",'q','z'), Player("Lili",'p','m')],Deck(1),Snap_Condition.MATCH_VALUE)
+        game= Game([Player("Ellie",'q','z'), Player("Lili",'p','m')],Deck(1),Snap_Condition.MATCH_VALUE,num_rounds)
     else:
         # Game setup:
         
@@ -29,17 +31,22 @@ def main():
         # Get list of Player objects using user input
         players = Game_Setup.get_players(num_players)
         
-        # Get matching condiiton
+        # Get matching condition
         snap_condition = Game_Setup.get_snap_condition()
         
         # Get number of packs of cards used for game 
-        num_packs = Game_Setup.get_decks(snap_condition)
+        max_packs = 5 # set the maximum number of packs to use here
+        num_packs = Game_Setup.get_decks(snap_condition, max_packs)
+        
+        # Get number of rounds to play
+        max_rounds = 30 # set maximum number of rounds here
+        num_rounds = Game_Setup.get_num_rounds(max_rounds)
         
         # Create game deck
         game_deck = Deck(num_packs)
         
         # Create game object
-        game = Game(players,game_deck,snap_condition) 
+        game = Game(players,game_deck,snap_condition,num_rounds) 
     
     print("\n<< Game setup complete >>", end='\n\n')
     # shuffle cards at start of game:

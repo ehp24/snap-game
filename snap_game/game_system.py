@@ -57,7 +57,7 @@ class Snap_Condition(Enum):
     
     
 class Game:
-    def __init__(self, players: list[Player], game_deck: Deck, snap_condition:Snap_Condition) -> None:
+    def __init__(self, players: list[Player], game_deck: Deck, snap_condition:Snap_Condition, num_rounds: int) -> None:
         self.players = players
         self.game_deck = game_deck
         self.pile = Pile()
@@ -68,6 +68,8 @@ class Game:
         self.snap_condition = snap_condition
         self.snap_key_pressed = None
         self.winner = None
+        self.rounds = num_rounds
+        self.round_count = 0
         
     def shuffle_game_deck(self):
         self.game_deck.shuffle()
@@ -82,6 +84,12 @@ class Game:
                     
     # pytest this!!!        
     def run_game(self):
+        
+        # Game start prints
+        print("\n\n<< Game start >>")
+        print("*** Press ESC if you want to exit the game at any time ***")
+        print("\n\n[ROUND 1]")
+        
         # a fucntion that continouosly monitors the states of the game and runs the respective fucntions depending on the state
         while self.state != Game_State.END:
             if self.state == Game_State.PLAY:
@@ -119,7 +127,10 @@ class Game:
             self.pile.add_to_pile(played_card)
             print(f"{self.current_player.name}, you played a {played_card}")
             (card1, card2) = self.pile.get_top_2()
-            print(f"Cards at top of pile:\n{card1.show_card() if card1 else '(No card)'} , {card2.show_card() if card2 else ('empty pile')}", end='\n\n' )
+            print(f"Two cards at top of pile:")
+            print("-----------------------")
+            print(f"{str(card1) if card1 else '(No card)'} | {str(card2) if card2 else '(No card)'}")
+            print("-----------------------", end='\n\n')
             self.switch_current_player()
             
     
@@ -157,37 +168,45 @@ class Game:
         # check is snap correct or not
         (card1, card2) = self.pile.get_top_2()
         
-        if card1 == None or card2 == None:
+        if card1 == None or card2 == None: # maybe try except this with Attirbute error e.g. card.suit will error if none
             print("Snap was called incorrectly, please carry on playing.", end='\n\n')
             self.state = Game_State.PLAY
             self.snap_key_pressed = None
             return         
         
-        # for only 1 round game, the person who correctly calls snap first is the game winner
-        if self.snap_condition == Snap_Condition.MATCH_SUIT and card1.suit == card2.suit:
-                self.state = Game_State.WINNER         
-        elif self.snap_condition == Snap_Condition.MATCH_VALUE and card1.value == card2.value:
+        # If snap called correctly:
+        if ((self.snap_condition == Snap_Condition.MATCH_SUIT and card1.suit == card2.suit) or
+            (self.snap_condition == Snap_Condition.MATCH_VALUE and card1.value == card2.value) or 
+            (self.snap_condition == Snap_Condition.MATCH_SUIT_VALUE and card1.value == card2.value and card1.suit == card2.suit)
+            ):
+            
+            # who called snap
+            snap_caller = self.player1 if self.snap_key_pressed==self.player1.snapkey else self.player2
+            
+            # Add pile to caller's hand
+            print(f"\nWell done {snap_caller.name}! You correctly called snap, the pile will be added to your hand.", end='\n\n')
+            pile_cards = self.pile.get_all_cards()
+            snap_caller.add_cards_to_hand(pile_cards)
+            
+            # clear pile
+            self.pile.clear_all()
+            
+            # Update Round and Game State
+            self.round_count +=1
+            
+            if self.round_count >= self.rounds: # should never be greater than as WIN then terminates game, but precautionary?
                 self.state = Game_State.WINNER
-        elif self.snap_condition == Snap_Condition.MATCH_SUIT_VALUE and card1.value == card2.value and card1.suit == card2.suit:
-                self.state = Game_State.WINNER
+            else:
+                self.state = Game_State.PLAY
+                print(f"Number of cards in each player's hand:")
+                print(f"{self.player1.name} [{len(self.player1.hand)}], {self.player2.name} [{len(self.player2.hand)}]")
+                print(f"\n\n[ROUND {self.round_count+1}]")
+                
         else:
             print("Snap was called incorrectly, please carry on playing.")
             self.state = Game_State.PLAY
             self.snap_key_pressed = None
-            return
-        
-        # who called snap
-        if self.player1.snapkey ==  self.snap_key_pressed:
-            snap_caller = self.player1
-        else:
-            snap_caller = self.player2
-        
-        print(f"\nWell done {snap_caller.name}! You correctly called snap, card pile will be added to your hand.", end='\n\n')
-        pile_cards = self.pile.get_all_cards()
-        snap_caller.add_cards_to_hand(pile_cards)
-        # clear pile
-        self.pile.clear_all()
-        
+            
         
     
     def win(self):
@@ -195,14 +214,15 @@ class Game:
         player1_numcards = len(self.player1.show_hand())
         player2_numcards = len(self.player2.show_hand())
 
-        print("<< Game Finished >>", end='\n\n')
+        print("\n<< Game Finished >>")
         print(f"{self.player1.name} ends with {player1_numcards} cards, {self.player2.name} ends with {player2_numcards}.", end='\n\n')
-        print("<< Game Result >>", end='\n\n')
+        print("\n<< Game Result >>")
         
-        if not self.snap_key_pressed:
-            # No one correctly snapped, player1 will be the first to lose all cards but only becayse they started first
-            print("No player correctly called snap during this round, so no one wins.")
-        elif player2_numcards == player1_numcards: # technicaly this should be same cond as the first if above
+        # if not self.snap_key_pressed: # dpracated this as with mutiple rounds, cannot track this properly 
+        #     # No one correctly snapped, player1 will be the first to lose all cards but only becayse they started first
+        #     print("No player correctly called snap during this round, so no one wins.")
+        
+        if player2_numcards == player1_numcards: 
             print(f"Both players have ended with the same number of cards, it's a Tie!")
         else:
             self.winner = self.player1 if (player1_numcards > player2_numcards) else self.player2

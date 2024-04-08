@@ -50,25 +50,40 @@ class Game_Setup:
     
 
     @staticmethod
-    def get_decks(snapcondition):
+    def get_decks(snapcondition, max_packs: int):
         try:
             # Require min 2 packs of cards if matching by suit and value i.e. same card
             minpacks = 2 if snapcondition == Snap_Condition.MATCH_SUIT_VALUE else 1
 
-            num_packs = float(input(f"Enter the number of packs of cards to use ({minpacks} to 5): "))
+            num_packs = float(input(f"Enter the number of packs of cards to use ({minpacks} to {max_packs}): "))
 
-            if num_packs.is_integer() and minpacks<=int(num_packs) and int(num_packs)<=5 :
+            if num_packs.is_integer() and minpacks<=int(num_packs) and int(num_packs)<=max_packs :
                 num_packs = int(num_packs)
                 print(f"\nThanks! {num_packs} pack(s) of cards will be used in the game deck.", end='\n\n')
             else:
-                raise ValueError(f"Invalid number: number was not an integer between {minpacks} and 5.")
+                raise ValueError(f"Invalid number: number was not an integer between {minpacks} and {max_packs}.")
 
         except ValueError:
-            print(f"\nInvalid input: please enter an integer value between {minpacks} and 5.")
+            print(f"\nInvalid input: please enter an integer value between {minpacks} and {max_packs}.")
             num_packs = Game_Setup.get_decks(snapcondition)
         return num_packs
     
     @staticmethod
     def ready_2_play():
         input("Ready to play? [Press ENTER]:")
-        print("\n\n<< Game start >>")
+        
+    @staticmethod
+    def get_num_rounds(max_rounds: int):
+        try:
+            num_rounds = float(input(f"Enter the number of rounds you would like to play (max {max_rounds}): "))
+            
+            if num_rounds.is_integer() and num_rounds>0 and num_rounds<=max_rounds:
+                num_rounds = int(num_rounds)
+                print(f"\nGreat, unless a player runs out of cards first, the game will end after {num_rounds} of snap.", end='\n\n')
+            else:
+                raise ValueError("Invalid number of rounds chosen")
+        except ValueError:
+            print(f"\nInvalid input: please enter an integer value between 1 and {max_rounds}.")
+            num_rounds = Game_Setup.get_num_rounds(max_rounds)
+        return num_rounds
+        
