@@ -1,6 +1,7 @@
 from snap_game.cards import Deck
 from snap_game.game_system import Game
 from snap_game.game_setup import Game_Setup, End_Condition
+import time
 
 def main():
     
@@ -32,14 +33,18 @@ def main():
     game = Game(players, Deck(num_packs), snap_condition, num_rounds) 
     
     print("\n<< Game setup complete >>", end='\n\n')
+    time.sleep(1)
     game.shuffle_game_deck()
+    time.sleep(1)
     game.deal_cards()
+    time.sleep(1)
     input("Ready to play? [Press ENTER]:")
     
     # Game start, will exit this once we have a winner and game is over or ESC pressed
     game.run_game() 
     
     # Game finished
+    time.sleep(2)
     print("\nThanks for playing!")
     print("===================================================")   
 

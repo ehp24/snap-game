@@ -1,5 +1,6 @@
 from snap_game.game_system import Player, Snap_Condition
 from enum import Enum
+import time
 
 class End_Condition(Enum):
     ROUNDS = 0
@@ -16,7 +17,7 @@ class Game_Setup:
         print("The aim of the game is to win cards by calling SNAP when the two cards on the top of the pile match by a certain condition.")
         print("If you call snap correctly, the cards in the pile will be added to your hand.")
         print("A round is finished when a player successfully calls snap.")
-        print("The player with the most cards in their hand at the end of the rounds is the winner!", end='\n\n')
+        print("The player with the most cards in their hand at the end of the game is the winner!", end='\n\n')
         
     @staticmethod
     def get_players(num_players: int):
@@ -34,7 +35,8 @@ class Game_Setup:
             players[i] = Player(name,play_keys[i], snap_keys[i])
             print(f"Hi {name}, you are Player {i+1}!")
             print(f"{name}, press key [{play_keys[i]}] to play a card on your pile, and key [{snap_keys[i]}] to call Snap!", end = "\n\n")
-        
+            time.sleep(4)
+            
         return players
     
     @staticmethod
@@ -56,6 +58,7 @@ class Game_Setup:
             key_pressed = input(f"Invalid option: please choose either [{match_keys['suits']}], [{match_keys['value']}] or [{match_keys['both']}]: ")
 
         print(f"Nice! You chose snap condition [{key_pressed}].", end='\n\n')
+        time.sleep(2)
         return match_keys[key_pressed]
 
     @staticmethod
@@ -66,6 +69,7 @@ class Game_Setup:
             if num_packs.is_integer() and minpacks<=int(num_packs) and int(num_packs)<=max_packs :
                 num_packs = int(num_packs)
                 print(f"Thanks! {num_packs} pack(s) of cards will be used in the game deck.", end='\n\n')
+                time.sleep(2)
             else:
                 raise ValueError(f"Invalid input recieved")
         except ValueError:
@@ -79,7 +83,8 @@ class Game_Setup:
             num_rounds = float(input(f"Enter the number of rounds you would like to play (max {max_rounds}): "))
             if num_rounds.is_integer() and num_rounds>0 and num_rounds<=max_rounds:
                 num_rounds = int(num_rounds)
-                print(f"Great, unless a player runs out of cards first, the game will end after {num_rounds} of snap.", end='\n\n')
+                print(f"Great, unless a player runs out of cards first, the game will end after {num_rounds} rounds of snap.", end='\n\n')
+                time.sleep(4)
             else:
                 raise ValueError("Invalid number of rounds chosen")
         except ValueError:
@@ -100,6 +105,7 @@ class Game_Setup:
             end_condition = input(f"Invalid option: please choose either [a] or [b]: ")
             
         print(f"Thanks! You chose end condition [{end_condition}].", end='\n\n')
+        time.sleep(1)
         return conditions[end_condition]
             
             

@@ -1,6 +1,8 @@
 from .cards import Card, Deck, Pile
 from pynput import keyboard
 from enum import Enum
+import time
+import random
 
 class Game_State(Enum):
     PLAY = 0
@@ -37,6 +39,7 @@ class Player:
     
     
 class Game:
+    
     def __init__(self, players: list[Player], game_deck: Deck, snap_condition:Snap_Condition, num_rounds) -> None:
         self.players = players
         self.game_deck = game_deck
@@ -66,8 +69,13 @@ class Game:
                            
     def run_game(self):
         print("\n\n<< Game start >>")
+        time.sleep(1)
         print("\n*** Press ESC if you want to exit the game at any time ***")
+        time.sleep(2)
+        print("Remeber, press your snapkey to shout 'SNAP!' at any time.")
+        time.sleep(2)
         print("[ROUND 1]")
+        time.sleep(2)
         
         while self.state != Game_State.END: # when state = end, exit and back to main.py
             if self.state == Game_State.PLAY:
@@ -88,9 +96,13 @@ class Game:
         
         try:
             if key.char == self.current_player.playkey: 
+                print("Playing card...")
+                time.sleep(int(random.uniform(1,4)))
                 self.card_played()
                 return False # terminates listener
             elif key.char in [player.snapkey for player in self.players]:
+                print("SNAP!")
+                time.sleep(int(random.uniform(1,4)))
                 self.snap_key_pressed = key.char
                 self.state = Game_State.SNAP
                 return False # terminates listener
@@ -115,11 +127,12 @@ class Game:
         else: 
             self.pile.add_to_pile(played_card)
             print(f"{self.current_player.name}, you played a {played_card}.")
+            time.sleep(2)
             (card1, card2) = self.pile.get_top_2()
-            print(f"Two cards at top of pile:")
+            print(f"\nTwo cards at top of pile:")
             print("-----------------------")
             print(f"{str(card1) if card1 else '(No card)'} | {str(card2) if card2 else '(No card)'}")
-            print("-----------------------", end='\n\n')
+            print("-----------------------", end='\n')
             self.switch_current_player()
             
     def switch_current_player(self):
@@ -152,6 +165,7 @@ class Game:
             self.pile.clear_all() # clear pile
             
             # Update Round and Game State
+            time.sleep(2)
             self.round_count +=1
             if self.round_count >= self.rounds: 
                 self.state = Game_State.WINNER
@@ -159,6 +173,7 @@ class Game:
                 self.state = Game_State.PLAY
                 print(f"Number of cards in each player's hand:")
                 print(f"{self.player1.name} [{len(self.player1.hand)}], {self.player2.name} [{len(self.player2.hand)}]")
+                time.sleep(2)
                 print(f"\n\n[ROUND {self.round_count+1}]")
                 
         else:
@@ -174,6 +189,7 @@ class Game:
         print("\n<< Game Finished >>")
         print(f"{self.player1.name} ends with {player1_numcards} cards, {self.player2.name} ends with {player2_numcards}.", end='\n\n')
         
+        time.sleep(2)
         print("\n<< Game Result >>")
         if player2_numcards == player1_numcards: 
             print(f"Both players have ended with the same number of cards, it's a Tie!")
