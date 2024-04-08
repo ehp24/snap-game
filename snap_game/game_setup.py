@@ -83,9 +83,6 @@ class Game_Setup:
             num_packs = Game_Setup.get_decks(snapcondition, max_packs)
         return num_packs
     
-    @staticmethod
-    def ready_2_play():
-        input("Ready to play? [Press ENTER]:")
         
     @staticmethod
     def get_num_rounds(max_rounds: int):
