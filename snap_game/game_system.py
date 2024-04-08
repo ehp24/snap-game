@@ -57,7 +57,7 @@ class Snap_Condition(Enum):
     
     
 class Game:
-    def __init__(self, players: list[Player], game_deck: Deck, snap_condition:Snap_Condition, num_rounds: int) -> None:
+    def __init__(self, players: list[Player], game_deck: Deck, snap_condition:Snap_Condition, num_rounds) -> None:
         self.players = players
         self.game_deck = game_deck
         self.pile = Pile()
@@ -72,10 +72,12 @@ class Game:
         self.round_count = 0
         
     def shuffle_game_deck(self):
+        print("Shuffling cards...")
         self.game_deck.shuffle()
         
     def deal_cards(self):
         # draw cards one by one and append to each Player's hand until deck is empty
+        print("Dealing cards to players...")
         while self.game_deck.cards:
             for player in self.players:
                 if self.game_deck.cards:
@@ -87,8 +89,8 @@ class Game:
         
         # Game start prints
         print("\n\n<< Game start >>")
-        print("*** Press ESC if you want to exit the game at any time ***")
-        print("\n\n[ROUND 1]")
+        print("\n*** Press ESC if you want to exit the game at any time ***")
+        print("[ROUND 1]")
         
         # a fucntion that continouosly monitors the states of the game and runs the respective fucntions depending on the state
         while self.state != Game_State.END:

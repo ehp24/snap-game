@@ -1,7 +1,7 @@
 from snap_game.cards import Card, Deck, Pile
 from snap_game.game_system import Game, Player, Snap_Condition
 from snap_game.utils import clear_screen
-from snap_game.game_setup import Game_Setup
+from snap_game.game_setup import Game_Setup, End_Condition
 import time
 import sys
 import termios
@@ -38,9 +38,15 @@ def main():
         max_packs = 5 # set the maximum number of packs to use here
         num_packs = Game_Setup.get_decks(snap_condition, max_packs)
         
-        # Get number of rounds to play
-        max_rounds = 30 # set maximum number of rounds here
-        num_rounds = Game_Setup.get_num_rounds(max_rounds)
+        # Get end condition
+        ending_condition = Game_Setup.get_end_condition()
+        
+        if ending_condition == End_Condition.ROUNDS:
+            # Get number of rounds to play
+            max_rounds = 30 # set maximum number of rounds here
+            num_rounds = Game_Setup.get_num_rounds(max_rounds)
+        else: # end condition = until all cards won
+            num_rounds = float('inf') # set infinite number of rounds
         
         # Create game deck
         game_deck = Deck(num_packs)
@@ -50,14 +56,12 @@ def main():
     
     print("\n<< Game setup complete >>", end='\n\n')
     # shuffle cards at start of game:
-    print("Shuffling cards...", end='\n\n')
     game.shuffle_game_deck()
     
     # deal cards to players
-    print("Dealing cards to players...", end='\n\n')
     game.deal_cards()
     
-    Game_Setup.ready_2_play()
+    Game_Setup.ready_2_play() # maybe a bit pointless?
     
     game.run_game() # Game started, will exit this once we have a winner and game is over
 
