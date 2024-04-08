@@ -111,21 +111,17 @@ class Game:
         played_card = self.current_player.play_card()
         
         if not played_card: # if play_card() returns none:
-            print(f"Card could not be placed as {self.current_player.name}'s hand is empty.")
+            print(f"Card could not be placed as {self.current_player.name}'s hand is empty.", end='\n\n')
             self.state = Game_State.WINNER
 
         else:
         # only one pile in whole game so dont need to pass pile into card_played
             self.pile.add_to_pile(played_card)
-            print("You played a",played_card)
+            print(f"{self.current_player.name}, you played a {played_card}")
             (card1, card2) = self.pile.get_top_2()
-            print(f"Cards at top of pile: {card1.show_card() if card1 else 'No card'} , {card2.show_card() if card2 else ('empty pile')}", end='\n\n' )
+            print(f"Cards at top of pile:\n{card1.show_card() if card1 else '(No card)'} , {card2.show_card() if card2 else ('empty pile')}", end='\n\n' )
             self.switch_current_player()
             
-    # def on_release(self, key):
-        
-    #     termios.tcflush(sys.stdin, termios.TCIOFLUSH)
-    #     return False
     
     # NEED TO WRITE PYTEST  
     def on_press(self, key):
@@ -186,7 +182,7 @@ class Game:
         else:
             snap_caller = self.player2
         
-        print(f"Well done {snap_caller.name}! You correctly called snap, card pile will be added to your hand.")
+        print(f"\nWell done {snap_caller.name}! You correctly called snap, card pile will be added to your hand.", end='\n\n')
         pile_cards = self.pile.get_all_cards()
         snap_caller.add_cards_to_hand(pile_cards)
         # clear pile
@@ -199,8 +195,9 @@ class Game:
         player1_numcards = len(self.player1.show_hand())
         player2_numcards = len(self.player2.show_hand())
 
-        print("End of game")
-        print(f"{self.player1.name} ends with {player1_numcards} cards, {self.player2.name} ends with {player2_numcards}.")
+        print("<< Game Finished >>", end='\n\n')
+        print(f"{self.player1.name} ends with {player1_numcards} cards, {self.player2.name} ends with {player2_numcards}.", end='\n\n')
+        print("<< Game Result >>", end='\n\n')
         
         if not self.snap_key_pressed:
             # No one correctly snapped, player1 will be the first to lose all cards but only becayse they started first
@@ -214,13 +211,13 @@ class Game:
         self.state = Game_State.END
         
         # just data for testung purposes, DELETE AT END :
-        print("DATA FOR TESTING PURPOSES:")
-        print(f"cards in pile [{len(self.pile.show_all_cards())} in total]:")
-        print(f"{self.pile.show_all_cards()}")
-        print(f"cards in {self.player1.name}'s hand [{len(self.player1.show_hand())} in total]: ")
-        print(f"{self.player1.show_hand()}")
-        print(f"cards in {self.player2.name}'s hand [{len(self.player2.show_hand())} in total]: ")
-        print(f"{self.player2.show_hand()}")
+        # print("DATA FOR TESTING PURPOSES:")
+        # print(f"cards in pile [{len(self.pile.show_all_cards())} in total]:")
+        # print(f"{self.pile.show_all_cards()}")
+        # print(f"cards in {self.player1.name}'s hand [{len(self.player1.show_hand())} in total]: ")
+        # print(f"{self.player1.show_hand()}")
+        # print(f"cards in {self.player2.name}'s hand [{len(self.player2.show_hand())} in total]: ")
+        # print(f"{self.player2.show_hand()}")
         
         
     def switch_current_player(self):

@@ -6,6 +6,7 @@ def test_get_players(monkeypatch):
     input_names = ["Jane", "Jack"]
     play_keys = ["q", "p"]
     snap_keys = ["z", "m"]
+    num_players = 2
     expected_players = [Player(name, play_key, snap_key) for name, play_key, snap_key in zip(input_names, play_keys, snap_keys)]
 
     def mock_input(prompt):
@@ -13,7 +14,7 @@ def test_get_players(monkeypatch):
 
     monkeypatch.setattr('builtins.input', mock_input)
 
-    players = Game_Setup.get_players()
+    players = Game_Setup.get_players(num_players)
 
     assert len(players) == len(expected_players)
     for i in range(len(players)):

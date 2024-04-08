@@ -9,7 +9,7 @@ import os
 import tty
 
 def main():
-    print("==============================================")
+    print("===================================================")
     print("Welcome to the game of Snap!", end='\n\n')
     print("<< Instructions >>")
     print("The aim of the game is to win cards by calling SNAP when the two cards on the top of the pile match by a certain condition.")
@@ -54,7 +54,8 @@ def main():
     
     game.run_game() # Game started, will exit this once we have a winner and game is over
 
-    print("Terminating game.")
+    print("\nThanks for playing!")
+    print("===================================================")
     sys.stdin.flush()
     
 
