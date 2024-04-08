@@ -14,3 +14,6 @@ Note Mac Users:
 - Pressing the blank area just left of the ESC key in Touchbar generates multiple TAB inputs
 - Multiple TABs create an observed behaviour in terminal "Display all 2536 possibilities? (y or n)"
 - To stop this from executing many times, press ESC and then enter 'n' into the terminal.
+
+Update:
+- Missing some unit tests
