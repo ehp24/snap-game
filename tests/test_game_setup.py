@@ -1,7 +1,6 @@
 from snap_game.game_setup import Game_Setup
 from snap_game.game_system import Player, Snap_Condition
 
-
 def test_get_players(monkeypatch):
     input_names = ["Jane", "Jack"]
     play_keys = ["q", "p"]
@@ -13,7 +12,6 @@ def test_get_players(monkeypatch):
         return input_names.pop(0)
 
     monkeypatch.setattr('builtins.input', mock_input)
-
     players = Game_Setup.get_players(num_players)
 
     assert len(players) == len(expected_players)
@@ -23,7 +21,6 @@ def test_get_players(monkeypatch):
         assert players[i].hand == expected_players[i].hand
         assert players[i].playkey == expected_players[i].playkey
         assert players[i].snapkey == expected_players[i].snapkey
-
 
 def test_get_decks_valid_input(monkeypatch):
     max_decks = 5
@@ -39,7 +36,6 @@ def test_get_decks_valid_input(monkeypatch):
         result = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT,max_decks)
         assert result == op
 
-
 def test_get_decks_invalid_input(monkeypatch):
     max_decks = 5
     input_list = ["-1", "2.5", "3.990", "49", "0", "6", max_decks]
@@ -53,7 +49,3 @@ def test_get_decks_invalid_input(monkeypatch):
         valid_op = Game_Setup.get_decks(Snap_Condition.MATCH_SUIT, max_decks) #fucntion will keep runnign until we get valid input
         assert valid_op == 5
         
-# PLEASE WRITE PYTEST CHECKING WHEN SNAPCONDITION IS BOTH, SO THAT IT ERRORS FOR INPUT OF 1!!!!
-
-
-# WRITE PYTEST FOR GET SNAP CONDITION!!!

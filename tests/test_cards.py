@@ -17,16 +17,9 @@ def test_card_init(card):
     assert card.suit == "Diamonds"
     assert card.value == "8"
     
-def test_show_card(card):
-    assert card.show_card() == ("8", "Diamonds")
-    
-
 def test_card_str(card):
     assert str(card) == "8 Diamonds"
     
-
-
-
 
 @pytest.fixture
 def deck():
@@ -48,25 +41,14 @@ def test_deck_shuffle(deck):
     shuffled_2 = deck.cards.copy()
     assert shuffled_2 != shuffled_1
 
-def test_show_cards(deck):
-    cardlist = [str(c) for c in deck.cards]
-    assert deck.show_cards() == cardlist
-
 def test_deck_draw_card(deck):
     initial_count = len(deck.cards)
-    # card_on_top = deck.cards[-1]
     drawn_card = deck.draw()
-    assert type(drawn_card) == Card #can use isinstance() to check for subclasses also
-    # assert drawn_card == card_on_top 
+    assert type(drawn_card) == Card # can use isinstance() to check for subclasses also
     assert drawn_card not in deck.cards
     assert len(deck.cards) == initial_count -1
     
 
-
-
-
-    
-    
 @pytest.fixture
 def pile():
     return Pile()
@@ -78,7 +60,6 @@ def pile_with_cards():
     pile_1.cards +=cards
     return pile_1
     
-    
 def test_pile_init(pile):
     assert pile.cards == []
     
@@ -88,8 +69,6 @@ def test_pile_add_to_pile(pile, card):
     assert len(original_pile) == len(pile.cards) - 1
     assert pile.cards[-1] == card
     
-
-
 def test_pile_get_top_2_with_empty_pile(pile):
     assert pile.get_top_2() == (None,None)
     
@@ -109,38 +88,3 @@ def test_pile_clear_all(pile_with_cards):
 def test_get_all_cards(pile_with_cards):
     assert pile_with_cards.get_all_cards() == pile_with_cards.cards
 
-def test_show_all_cards(pile_with_cards):
-    cardlist = [str(c) for c in pile_with_cards.cards]
-    assert cardlist == pile_with_cards.show_all_cards()
-
-
-# def test_pile_check_snap_with_empty_pile(pile):
-#     assert pile.check_snap() == False
-
-# def test_pile_check_snap_with_single_card_pile(pile, card):
-#     pile.cards.append(card)
-#     assert pile.check_snap() == False
-    
-# def test_pile_check_snap_if_valid(pile):
-#     cards = 
-#     pile.
-
-
-
-    
-    
-
-
-
-
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-    

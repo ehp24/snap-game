@@ -1,12 +1,6 @@
-from snap_game.cards import Card, Deck, Pile
-from snap_game.game_system import Game, Player, Snap_Condition
-from snap_game.utils import clear_screen
+from snap_game.cards import Deck
+from snap_game.game_system import Game
 from snap_game.game_setup import Game_Setup, End_Condition
-import time
-import sys
-import termios
-import os
-import tty
 
 def main():
     
