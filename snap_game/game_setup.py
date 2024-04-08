@@ -2,6 +2,29 @@ from snap_game.game_system import Player, Snap_Condition
 
 # Helper class/ Utility class - never instanciated but has methods to call
 class Game_Setup:
+    
+    @staticmethod
+    def get_players(num_players: int):
+        
+        players = [None]*num_players
+        player_names = set()
+        play_keys = ["q","p"] # two keys as only two players for now
+        snap_keys = ["z", "m"] # predefined keys for now, can let players choose if extended
+
+        for i in range(0,num_players):
+            name = input(f"Enter Player {i+1}'s name: ")
+            
+            while name in player_names:
+                name = input(f"Sorry, player with that name already exists. Please enter another name: ")
+            
+            player_names.add(name)
+            players[i] = Player(name,play_keys[i], snap_keys[i])
+            
+            print(f"\nHi {name}, you are Player {i+1}!")
+            print(f"{name}, press key [{play_keys[i]}] to play a card on your pile, and key [{snap_keys[i]}] to call Snap!", end = "\n\n")
+            
+        return players
+    
     @staticmethod
     def get_snap_condition():
         match_keys = {'suits': 'a',
@@ -12,59 +35,40 @@ class Game_Setup:
                     'c': Snap_Condition.MATCH_SUIT_VALUE}
 
         print("Choose a condition to call snap for:")
-        print(f"[{match_keys['suits']}]: matching suit e.g. Spade and Spade")
-        print(f"[{match_keys['value']}]: matching card value e.g. A and A")
-        print(f"[{match_keys['both']}]: matching value AND suit e.g. A Spades and A Spades. If you choose this, you must choose more than one pack of cards to play with.")
+        print(f"[{match_keys['suits']}]: matching suit")
+        print(f"[{match_keys['value']}]: matching card value")
+        print(f"[{match_keys['both']}]: matching value AND suit i.e. same card - NOTE: for this option you must select more than one pack of cards to play with.", end='\n\n')
         key_pressed = input(f"Select [{match_keys['suits']}], [{match_keys['value']}] or [{match_keys['both']}]: ")
 
         while key_pressed not in set(['a','b','c']):
             key_pressed = input(f"Invalid option: please choose either [{match_keys['suits']}], [{match_keys['value']}] or [{match_keys['both']}]: ")
 
-        print(f"Nice! The snap condition will be {[key_pressed]}.")
+        print(f"\nNice! You chose snap condition [{key_pressed}].", end='\n\n')
+        
         return match_keys[key_pressed]
 
-    @staticmethod
-    def get_players():
-        num_players = 2 # fix for now 
-
-        players = [None]*num_players
-        player_names = set()
-        play_keys = ["q","p"] # two keys as only two players for now
-        snap_keys = ["z", "m"]
-
-        for i in range(0,num_players):
-            name = input(f"Enter Player{i+1}'s name: ")
-            while name in player_names:
-                name = input(f"Sorry, player with that name already exists. Please enter another name Player{i+1}: ")
-
-            player_names.add(name)
-            print(f"Hi {name}, you are Player{i+1}!" , end='\n\n')
-            print(f"{name}, please press key: {play_keys[i]} , to play a card on your pile, and key: {snap_keys[i]} , to call Snap! ")
-            # playkey = input(f"{name}, please choose a key for playing a card on your pile, it must be a single lower case character: ")
-
-            # while not check_valid_key(playkey):
-
-
-            players[i] = Player(name,play_keys[i], snap_keys[i])
-
-        return players
+    
 
     @staticmethod
     def get_decks(snapcondition):
         try:
-            if snapcondition == Snap_Condition.MATCH_SUIT_VALUE:
-                minpacks = 2
-            else:
-                minpacks = 1
+            # Require min 2 packs of cards if matching by suit and value i.e. same card
+            minpacks = 2 if snapcondition == Snap_Condition.MATCH_SUIT_VALUE else 1
+
             num_packs = float(input(f"Enter the number of packs of cards to use ({minpacks} to 5): "))
-            print(" ")
+
             if num_packs.is_integer() and minpacks<=int(num_packs) and int(num_packs)<=5 :
                 num_packs = int(num_packs)
-                print(f"{num_packs} packs of cards will be used in the game deck.", end='\n\n')
+                print(f"\nThanks! {num_packs} pack(s) of cards will be used in the game deck.", end='\n\n')
             else:
                 raise ValueError(f"Invalid number: number was not an integer between {minpacks} and 5.")
 
         except ValueError:
-            print(f"Invalid input: please enter an integer value between {minpacks} and 5.")
+            print(f"\nInvalid input: please enter an integer value between {minpacks} and 5.")
             num_packs = Game_Setup.get_decks(snapcondition)
         return num_packs
+    
+    @staticmethod
+    def ready_2_play():
+        input("Ready to play? [Press ENTER]:")
+        print("\n\n<< Game start >>")

@@ -10,15 +10,24 @@ import tty
 
 def main():
     print("==============================================")
-    print("Welcome to the Game of Snap!", end='\n\n')
+    print("Welcome to the game of Snap!", end='\n\n')
+    print("<< Instructions >>")
+    print("The aim of the game is to win cards by calling SNAP when the two cards on the top of the pile match by a certain condition.")
+    print("If you call snap correctly, the cards in the pile will be added to your hand.")
+    print("The player with the most cards in their hand at the end of the rounds is the winner!", end='\n\n')
     
     # cut beginning for tetsing purposes
     testing = 0
     if testing:
         game= Game([Player("Ellie",'q','z'), Player("Lili",'p','m')],Deck(1),Snap_Condition.MATCH_VALUE)
     else:
+        # Game setup:
+        
+        # Number of players, 2 by defualt, if not create fucntion to collect user input for this
+        num_players = 2 # fix for now 
+        
         # Get list of Player objects using user input
-        players = Game_Setup.get_players()
+        players = Game_Setup.get_players(num_players)
         
         # Get matching condiiton
         snap_condition = Game_Setup.get_snap_condition()
@@ -26,14 +35,14 @@ def main():
         # Get number of packs of cards used for game 
         num_packs = Game_Setup.get_decks(snap_condition)
         
-        
         # Create game deck
         game_deck = Deck(num_packs)
         
         # Create game object
         game = Game(players,game_deck,snap_condition) 
     
-    # shuffle cards at start fo game:
+    print("\n<< Game setup complete >>", end='\n\n')
+    # shuffle cards at start of game:
     print("Shuffling cards...", end='\n\n')
     game.shuffle_game_deck()
     
@@ -41,11 +50,11 @@ def main():
     print("Dealing cards to players...", end='\n\n')
     game.deal_cards()
     
-    game.run_game()
-
-     
+    Game_Setup.ready_2_play()
     
-    print("were in mainloop and were done!")
+    game.run_game() # Game started, will exit this once we have a winner and game is over
+
+    print("Terminating game.")
     sys.stdin.flush()
     
 
